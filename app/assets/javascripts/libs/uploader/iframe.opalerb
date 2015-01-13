@@ -1,0 +1,6 @@
+<iframe 
+  id="<%= @id %>_target" 
+  name="<%= @id %>_target"
+  src="about:blank" 
+  style="position: absolute; top: -10000px; left: -10000px; z-index: 0; border: 0px solid rgb(255, 255, 255); width: 0pt; height: 0pt;">
+</iframe>

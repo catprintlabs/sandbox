@@ -29,7 +29,7 @@ watch ("Guardfile") do
   exit 0
 end
 
-guard 'livereload', port: 9999 do
+guard 'livereload', port: 9999, grace_period: 0.5 do
   watch(%r{app/views/.+\.(erb|haml|slim)$})
   watch(%r{app/helpers/.+\.rb})
   watch(%r{public/.+\.(css|js|html)})

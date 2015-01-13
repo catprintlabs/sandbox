@@ -1,0 +1,13 @@
+<form 
+    class="_upload_widget_form_class" 
+    name="<%= @id %>_form" method="post" 
+    target="<%= @id %>_target"  
+    id="<%= @id %>_form" 
+    enctype="multipart/form-data">
+  <% if @http_link %>
+    <input type="hidden" name="remote_image_url" value="<%= @http_link %>" />
+  <% else %>
+    <input type="file" name="image" id="<%= @id %>_file_input" <%= 'multiple' if @multiple %> />
+  <% end %>
+  <input type="hidden" name="secure_token" id="<%= @id %>_secure_token" />
+</form>
