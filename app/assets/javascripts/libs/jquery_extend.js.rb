@@ -1,3 +1,5 @@
+require 'opal'
+
 class Element
   def self.extend(method, &block)
     `(function ( $ ) {  $.fn[#{method}] = function() {

@@ -1,3 +1,5 @@
+require 'opal'
+
 class FileList < Array
   
   # wraps native HTML5 filelist object

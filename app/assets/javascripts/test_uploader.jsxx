@@ -15,6 +15,7 @@ jQuery(document).ready(function($) {
     }
   });};
   create_uploader();
+  return;
   $('#jq_form_here').uploader({
     user: "me@benhughes.name",
     http_link: window.location.host+"/catprintqrcode.png",

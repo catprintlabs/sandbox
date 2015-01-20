@@ -1,0 +1,50 @@
+/* the following styles allow files names and the progress bar to fill available space in the table
+   without supplying absolute widths */
+
+table.iw-finder-table td {
+  /* don't override this as its used to dynamically determine available space for the filename */
+  white-space: nowrap !important; 
+}
+
+table.iw-finder-table td.iw-finder-filename {
+  /* don't override these as its used to dynamically determine available space for the filename */
+  white-space: normal !important; 
+  width: 100% !important;
+}
+
+/* creates a 1 px header to reserve maximum needed space needed for each column.  */
+
+tr._iw-finder-header div {height: 1px; overflow: hidden}
+tr._iw-finder-header {height 1px; visibility: hidden}
+tr._iw-finder-header td {height: 1px; padding: 0}
+
+/* these styles can be overriden as needed */
+
+table.iw-finder-table td.iw-finder-filename div {
+  height: 18px; /* note this must be at least height of 1 line, if font size changes this needs to change to match */
+} 
+
+table.iw-finder-table {
+  border-collapse: collapse; /* eliminates borders */
+  width: 100%; 
+}
+
+table.iw-finder-table td {
+  border: none; 
+  padding-top: 4px; 
+  padding-bottom: 4px
+}
+
+span.iw-finder-load-state {
+  padding-right: 3px;
+}
+
+span.iw-finder-filename-loading {font-style: italic;}
+
+tr.iw-finder-odd-row  {background-color: #909090}
+tr.iw-finder-even-row {background-color: #B0B0B0}
+
+td.iw-finder-opener    {text-align: center}
+td.iw-finder-delete    {text-align: right; padding-right: 2px}
+td.iw-finder-progress  {padding-right: 4px;}
+td.iw-finder-page-count {padding-left: 2px; padding-right: 2px}

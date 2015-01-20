@@ -1,3 +1,63 @@
 Welcome to the sandbox!
+
+<div style="width:450px">
+  <table class="iw-finder-table">
+  
+  <tr class="_iw-finder-header" > <!-- dummy header reserves space for each column -->
+    <td><div ><input type=checkbox /></div></td>
+    <td><div >upload started at 99:99 PM</div></td>
+    <td class="iw-finder-filename"><span></span></td>
+    <td><div >999 pages</div></td>
+    <td><div ><input type=button value="show"><br/><input type=button value="hide"></div></td>
+    <td><div ><input type=button value="confirm"><br/><input type=button value="cancel"><br/><input type=button value="delete"></div></td>
+  </tr>
+  
+  <tr class="iw-finder-odd-row"> <!-- file is ready -->
+    <td class="iw-finder-checkbox"><input type=checkbox /></td>
+    <td class="iw-finder-filename" colspan="2"><div >my-file-name-is-really-long-for-some-reason-who-knows-why<span class="iw-finder-filename-extension">.jpg</span></div></td>
+    <td class="iw-finder-page-count">999 pages</td>
+    <td class="iw-finder-opener"><input type=button value="show"></td>
+    <td class="iw-finder-delete"><input type=button value="delete"></td>
+  </tr>
+  <tr class="iw-finder-even-row"> <!-- file is not ready -->
+    <td class="iw-finder-checkbox"><input type=checkbox disabled /></td>
+    <td class="iw-finder-filename" colspan="4"><div ><span class="iw-finder-load-state">loading</span><span class="iw-finder-filename-loading">my-file-name-is-really-long-for-some-reason-who-knows-why</span><span class="iw-finder-filename-loading iw-finder-filename-extension">.jpg</span></div></td>
+    <td class="iw-finder-delete"><input type=button value="cancel"></td>
+  </tr>
+  <tr class="iw-finder-even-row"> <!-- progress bar -->
+    <td class="iw-finder-checkbox"></td>
+    <td>upload started at 7:49 PM</td>
+    <td colspan="4" class="iw-finder-progress"><div class='progressbar'><div class='progress' style='width: 62%'><div class='pbaranim'></div></div></div></td>
+  </tr>
+  <tr class="iw-finder-odd-row"> <!-- file is ready -->
+    <td class="iw-finder-checkbox"><input type=checkbox /></td>
+    <td class="iw-finder-filename" colspan="2"><div >normal-file-name<span class="iw-finder-filename-extension">.jpg</span></div></td>
+    <td class="iw-finder-page-count">1 page</td>
+    <td class="iw-finder-opener"><input type=button value="show"></td>
+    <td class="iw-finder-delete"><input type=button value="confirm"></td>
+  </tr>
+  <tr class="iw-finder-even-row"> <!-- file is ready -->
+    <td class="iw-finder-checkbox"><input type=checkbox /></td>
+    <td class="iw-finder-filename" colspan="2"><div >HasNoExtension<span class="iw-finder-filename-extension"></span></div></td>
+    <td class="iw-finder-page-count">2 pages</td>
+    <td class="iw-finder-opener"><input type=button value="show"></td>
+    <td class="iw-finder-delete"><input type=button value="delete"></td>
+  </tr>
+  <tr class="iw-finder-even-row" >
+    <td></td>
+    <td colspan="5">
+      <table>
+          <tr>
+            <td><input type=checkbox class="choose-file" id="<x%= file['id'] %>-choose-file"/>
+            <td><img src="<x%= panel['imageURL'] %>" /></td>
+          </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</div>
+
+
 <div id="jq_form_here" style="border: 1px solid; margin: 10px">JQ generated form is going in here.</div>
 <div id="rb_form_here" style="border: 1px solid; margin: 10px">Ruby generated form is going in here.</div>
+<div id="iw_finder_here">iw finder is going in here...</div>

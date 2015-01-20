@@ -108,6 +108,9 @@ GEM
       sprockets
     opal-activesupport (0.0.5)
       opal
+    opal-browser (0.2.0.beta1)
+      opal (~> 0.6.0)
+      paggio
     opal-rails (0.6.3)
       jquery-rails
       opal (~> 0.6.0)
@@ -117,6 +120,7 @@ GEM
       rails (>= 3.2.13, < 5.0)
     opal-rspec (0.3.0.beta3)
       opal (>= 0.6.0, < 1.0.0)
+    paggio (0.2.4)
     polyglot (0.3.5)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -202,6 +206,7 @@ DEPENDENCIES
   jbuilder (~> 2.0)
   jquery-rails
   letter_opener
+  opal-browser
   opal-jquery!
   opal-rails
   pry

@@ -13,7 +13,7 @@ def create_uploader
       puts [
         "(ruby) progress is being made on #{upload.progress[:name]}",
         "secure token: #{upload.progress[:secure_token]}", 
-        "percent loaded: #{upload.progress[:percent_complete]*100.round}"
+        "percent loaded: #{(upload.progress[:percent_complete] || 0)*100.round}"
       ].join(" -  ")
     end
   end
@@ -22,8 +22,11 @@ end
 Document.ready? do 
   puts "adding a ruby uploader!"
   create_uploader
-  UploadWidget.new(Element['rb_form_here'], "me@benhughes.name", http_link: "#{`window.location.host`}/catprintqrcode.com") do |upload|
-    upload.submit { puts '(ruby) http submitted!' };
-    upload.progress { puts "(ruby) http progress on #{upload.progress[:name]}" }
+  if false
+    UploadWidget.new(Element['rb_form_here'], "me@benhughes.name", http_link: "#{`window.location.host`}/catprintqrcode.com") do |upload|
+      upload.submit { puts '(ruby) http submitted!' };
+      upload.progress { puts "(ruby) http progress on #{upload.progress[:name]}" }
+    end
   end
+
 end

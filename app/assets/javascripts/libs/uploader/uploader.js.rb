@@ -17,8 +17,6 @@ end
 
 class UploadWidget
   
-  IW_LOCATION = "http://iw2.catprint.com"
-  
   attr_reader :status
   attr_reader :form
   attr_reader :parent
@@ -89,7 +87,7 @@ class UploadWidget
   end
   
   def new_iw_file
-    HTTP.get("#{IW_LOCATION}/v1/files/new?user=#{@user}&callback=?", dataType: 'json') do |data|
+    HTTP.get("#{IWFinder::IW_LOCATION}/v1/files/new?user=#{@user}&callback=?", dataType: 'json') do |data|
       if data.json["errormessage"]
         @status = :error
         @error_message = data.json["errormessage"]
@@ -110,7 +108,7 @@ class UploadWidget
           xhr = lambda { build_xhr_progress_handler({status: :uploading, name: file.name, percent_complete: 0, secure_token: secure_token}) }
           HTTP.put(upload_url, data: file, cache: false, contentType: false, processData: false, xhr: xhr) do |response|
             if response.ok?
-              HTTP.get("#{IW_LOCATION}/v1/files/upload_complete?secure_token=#{secure_token}&file_name=#{file.name}&callback=?", dataType: 'json')
+              HTTP.get("#{IWFinder::IW_LOCATION}/v1/files/upload_complete?secure_token=#{secure_token}&file_name=#{file.name}&callback=?", dataType: 'json')
             else
               puts 'HTTP put failed'
             end
@@ -119,7 +117,7 @@ class UploadWidget
       end
     else
       new_iw_file do |secure_token|
-        @form.attr("action", "#{IW_LOCATION}/v1/files?X-Progress-ID=#{secure_token}")
+        @form.attr("action", "#{IWFinder::IW_LOCATION}/v1/files?X-Progress-ID=#{secure_token}")
         @form.find('[name=secure_token]').value = secure_token
         @_progress = {status: :uploading, name: @http_link ? @http_link : @form.find('file').value, percent_complete: 0, secure_token: secure_token}
         @progress = @_progress.to_n
