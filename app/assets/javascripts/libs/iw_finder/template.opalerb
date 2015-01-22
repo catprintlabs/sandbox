@@ -11,7 +11,8 @@
         <input type=button value="confirm"><br/><input type=button value="cancel"><br/><input type=button value="delete">
       </div>
     </td> 
-  </tr>    
+  </tr>  
+  
   <% files.each do |file| %>
     <tr class="iw-finder-<%= file[:cycle] %>-row" >
       <td class="iw-finder-checkbox"><input type=checkbox class='iw-finder-choose-file' iw-file-id='<%= file["id"] %>' <%= "disabled" if file["state"] != "ready" %>/></td>
