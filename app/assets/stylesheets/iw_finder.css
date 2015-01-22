@@ -10,13 +10,20 @@ table.iw-finder-table td.iw-finder-filename {
   /* don't override these as its used to dynamically determine available space for the filename */
   white-space: normal !important; 
   width: 100% !important;
+  word-break: break-all !important;
 }
 
 /* creates a 1 px header to reserve maximum needed space needed for each column.  */
 
-tr._iw-finder-header div {height: 1px; overflow: hidden}
-tr._iw-finder-header {height 1px; visibility: hidden}
-tr._iw-finder-header td {height: 1px; padding: 0}
+div._iw-finder-header {height: 1px !important; overflow: hidden !important}
+tr._iw-finder-header  {height 1px !important; visibility: hidden !important}
+td._iw-finder-header  {height: 1px !important; padding-top: 0 !important; padding-bottom: 0 !important; }
+
+/* keep the portions of the file name put together correctly, its possible to override (for example make everything float right) so its flagged as !important */
+
+/*table.iw-finder-table td.iw-finder-filename div span {
+ float: left 
+} */
 
 /* these styles can be overriden as needed */
 
@@ -45,6 +52,11 @@ tr.iw-finder-odd-row  {background-color: #909090}
 tr.iw-finder-even-row {background-color: #B0B0B0}
 
 td.iw-finder-opener    {text-align: center}
-td.iw-finder-delete    {text-align: right; padding-right: 2px}
-td.iw-finder-progress  {padding-right: 4px;}
+td.iw-finder-delete    {text-align: right; padding: 0 2px 0 0}
+td.iw-finder-progress   {padding-right: 4px;}
 td.iw-finder-page-count {padding-left: 2px; padding-right: 2px}
+
+div.iw-finder-panel-display { float: left }
+div.iw-finder-panel-img { margin-left: 3px; margin-right: 3px }
+div.iw-finder-panel-selector { margin-bottom: 10px }
+div.iw-finder-panel-selector span {font-size: 12px; margin-bottom: 4px}

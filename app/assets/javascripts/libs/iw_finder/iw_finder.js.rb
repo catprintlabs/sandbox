@@ -30,13 +30,17 @@ class IWFinder
   end
   
   def update
+    puts 'update called'
     HTTP.get("#{IW_LOCATION}/JSONPservices.aspx?command=GetFileList&userId=#{@user}&callback=?", dataType: 'json') do |data|
+      puts "got #{data.json['files'].count} files back"
       is_loading = false
       @update_pending.abort if @update_pending
+      puts 'lets add them in'
       data.json["files"].reverse.each do |file|
         unless file["trashed"]
           id = file["id"]
           file.delete("percentComplete") if file["iw2State"]=="initialized"
+          file.delete("fileName") if ["initialized", "uploading"].include? file["iw2State"] 
           file["percentComplete"] = ((file["panelCount"].to_f / file["totalPanels"].to_f)*100).round if file["iw2State"]=="uploaded"
           file[:current_state] = map_state(file["iw2State"]) # need to set an instance variable because of bug/limitation in opal erb processing 
           file[:loading] = file["state"]=="loading"
@@ -76,8 +80,9 @@ class IWFinder
     end
   end
 
-  def progress_for(secure_id, percent_complete)
-    @files[secure_id].merge!({"percentComplete" => percent_complete})
+  def progress_for(secure_id, percent_complete, filename)
+    return unless @files[secure_id]
+    @files[secure_id].merge!({"percentComplete" => percent_complete, "fileName" => filename})
     render_pending
   end
 
@@ -85,6 +90,10 @@ class IWFinder
     @files.delete(file["id"])
     HTTP.get("#{IW_LOCATION}/v1/files/#{file["id"]}/trash?callback=?", dataType: 'json')
     render
+  end
+
+  def iw_file(e)
+    @files[e.attr('iw-file-id')] 
   end
   
   def render
@@ -95,14 +104,34 @@ class IWFinder
     @rendering_in_queue = false
     @render_pending.abort and @render_pending = nil if @render_pending
     @container.html = Template[__FILE__.gsub(/iw_finder$/,"template")].render(self)
-    Element['.iw-finder-opener input'].on :click do |evt|
-      file = @files[Element[evt.current_target].attr('file-id')]
+    
+    Element['.iw-finder-filename div'].dotdotdot({wrap: 'letter', after: '.iw-finder-filename-extension', watch: true}.to_n)
+    Element['.iw-finder-opener input'].on(:click) do |evt|
+      file = iw_file Element[evt.current_target]
       file[:show_panels] = !file[:show_panels]
       render
       resume_rendering
     end
+    Element['.iw-finder-choose-file'].each do |file_checkbox|
+      set_file_selected_state file_checkbox
+    end.on :click do |evt|
+      file = iw_file Element[evt.current_target]
+      file[:panels].each { |panel| panel[:selected] = Element[evt.current_target].prop('checked') }
+      file[:show_panels] = Element[evt.current_target].prop('checked')
+      render
+      resume_rendering
+    end
+    Element['.iw-finder-choose-panel'].on :click do |evt|
+      panels = iw_file(Element[evt.current_target])[:panels]
+      panel = panels.find { |panel| 
+        panel["panelno"] == Element[evt.current_target].attr('iw-panelno').to_i
+      }
+      panel[:selected] = !panel[:selected]
+      render
+      resume_rendering
+    end
     Element['.iw-finder-delete input'].on :click do |evt|
-      file = @files[Element[evt.current_target].attr('file-id')]
+      file = iw_file Element[evt.current_target]
       if ["confirm", "cancel"].include? Element[evt.current_target].value
         delete file
         resume_rendering
@@ -128,6 +157,19 @@ class IWFinder
   def resume_rendering
     @rendering_paused = false
     render if @rendering_in_queue
+  end
+
+  def set_file_selected_state(file_checkbox)  # there is no way to set the indeterminate state in html, so its done after rendering
+    file = iw_file file_checkbox
+    return unless file[:panels]
+    if !file[:panels].find { |panel| !panel[:selected] }
+      file_checkbox.prop('checked', true)
+    elsif !file[:panels].find { |panel| panel[:selected] }
+      file_checkbox.prop('checked', false)
+    else 
+      file_checkbox.prop('indeterminate', true)
+      file_checkbox.prop('checked', false)
+    end
   end
   
 end

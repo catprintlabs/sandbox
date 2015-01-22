@@ -67,6 +67,7 @@ class UploadWidget
   #  $('#some-div').uploader({multiple: true, create: function(f) {f.form.addClass('my-style')}})
   
   def initialize(parent, user, opts = {}, &block)
+    opts = {html5: :multiple}.merge opts
     @parent = parent
     @user = user
     @block = block
@@ -78,7 +79,8 @@ class UploadWidget
       http_link = "http://#{http_link}" unless http_link =~ /^htt(ps|p):\/\//
     end
     @http_link = http_link
-    @multiple = opts[:multiple]
+    @html5_enabled = opts[:html5] and `window['File']`
+    @multiple = (opts[:html5] == :multiple)
     @parent.append(Template[__FILE__.gsub(/uploader$/,"form")].render(self))
     @form = Element["##{@id}_form"]
     @form.change("##{@id}_form") { handle_form_change } 
@@ -102,7 +104,7 @@ class UploadWidget
     i_frame = Template[__FILE__.gsub(/uploader$/,"iframe")].render(self)
     @parent.append(i_frame)
     @form.toggle_class('_upload_widget_form_class') 
-    if `window['File']` and !@http_link
+    if @html5_enabled and !@http_link
       @form.find('input[type=file]').files.each do |file|
         new_iw_file do |secure_token, upload_url| 
           xhr = lambda { build_xhr_progress_handler({status: :uploading, name: file.name, percent_complete: 0, secure_token: secure_token}) }

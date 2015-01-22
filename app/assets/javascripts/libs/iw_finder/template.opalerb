@@ -1,44 +1,47 @@
-<div>
-  <p>Time Now is <%= Time.now %></p>
-  <table class="iw-finder-table">
+<table class="iw-finder-table">
   
-    <tr class="_iw-finder-header" > <!-- dummy header reserves space for each column -->
-      <td><div ><input type=checkbox /></div></td>
-      <td><div >upload started at 99:99 PM</div></td>
-      <td class="iw-finder-filename"><span></span></td>
-      <td><div >999 pages</div></td>
-      <td><div ><input type=button value="show"><br/><input type=button value="hide"></div></td>
-      <td><div ><input type=button value="confirm"><br/><input type=button value="cancel"><br/><input type=button value="delete"></div></td>
-    </tr>
-    
+  <tr class="_iw-finder-header" > <!-- dummy header reserves space for each column -->
+    <td class="_iw-finder-header"><div class="_iw-finder-header"><input type=checkbox /></div></td>
+    <td class="_iw-finder-header"><div class="_iw-finder-header">upload started at 99:99 PM</div></td>
+    <td class="iw-finder-filename _iw-finder-header"><span></span></td>
+    <td class="_iw-finder-header iw-page-count"><div class="_iw-finder-header">999 pages</div></td>
+    <td class="_iw-finder-header iw-finder-opener"><div class="_iw-finder-header"><input type=button value="show"><br/><input type=button value="hide"></div></td>
+    <td class="_iw-finder-header iw-finder-delete">
+      <div class="_iw-finder-header">
+        <input type=button value="confirm"><br/><input type=button value="cancel"><br/><input type=button value="delete">
+      </div>
+    </td> 
+  </tr>    
   <% files.each do |file| %>
     <tr class="iw-finder-<%= file[:cycle] %>-row" >
-      <td class="iw-finder-checkbox"><input type=checkbox class='iw-choose-file' id='<%= file["id"] %>-choose-file' <%= "'disabled'" if file["state"] != "ready"/></td>
-      <td class="iw-finder-filename" colspan='<%= file["state"]=="ready" ? 2 : 4 %>'>
+      <td class="iw-finder-checkbox"><input type=checkbox class='iw-finder-choose-file' iw-file-id='<%= file["id"] %>' <%= "disabled" if file["state"] != "ready" %>/></td>
+      <td class="iw-finder-filename" colspan='<%= file[:loading] ? 4 : 2 %>'>
         <div>
           <%= "<span class='iw-finder-load-state'>#{file[:current_state]}</span>" if file[:loading] %>
           <%= "<span class='iw-finder-filename-#{file[:loading] ? "loading" : "ready"}'>#{file[:filename_head]}</span>" %>
           <%= "<span class='iw-finder-filename-#{file[:loading] ? "loading" : "ready"} iw-finder-filename-extension'>#{file[:filename_tail]}</span>" %>
         </div>
       </td>
-      <% unless file[:loading]
-        <td class="iw-finder-pages"><%= "#{file['panelCount']} #{file['panelCount'] > 1 ? 'pages' : 'page'}" if file["state"]=="ready" %></td>
+      <% unless file[:loading] %>
+        <td class="iw-finder-pages">
+          <%= file["state"]=="ready" ? "#{file['panelCount']} #{file['panelCount'] > 1 ? 'pages' : 'page'}" : "error"  %>
+        </td>
         <td class="iw-finder-opener">
           <% if file[:show_panels] %>
-            <input type=button file-id="<%= file['id'] %>" value="hide" />
+            <input type=button iw-file-id="<%= file['id'] %>" value="hide" />
           <% else %>
-            <input type=button file-id="<%= file['id'] %>" value="show" />
+            <input type=button iw-file-id="<%= file['id'] %>" value="show" />
           <% end %>
         </td>
       <% end %>
-      <td class="iw-finder-delete"><input type="button" file-id="<%= file['id'] %>" value='<%= file[:loading] ? "cancel" : "delete" %>' /></td>
+      <td class="iw-finder-delete"><input type="button" iw-file-id="<%= file['id'] %>" value='<%= file[:loading] ? "cancel" : "delete" %>' /></td>
     </tr>
     <% if file[:loading] %>
       <tr class="iw-finder-<%= file[:cycle] %>-row" >
         <td></td>
         <td>upload started at <%= Time.now.strftime("%l:%M %p") %></td>
         <td colspan="4" class="iw-finder-progress">
-          <div class='progressbar'><div class='progress' style='width: <%= files["percentComplete"] %>%'><div class='pbaranim'></div></div></div>
+          <div class='progressbar'><div class='progress' style='width: <%= file["percentComplete"] %>%'><div class='pbaranim'></div></div></div>
         </td>
       </tr>
     <% end %>
@@ -46,17 +49,25 @@
       <tr class="iw-finder-<%= file[:cycle] %>-row" >
         <td></td>
         <td colspan="5">
-          <table>
             <% file[:panels].each do |panel| %>
-              <tr>
-                <td><input type=checkbox class="iw-choose-file" id="<%= file['id'] %>-choose-file" />
-                <td><img src="<%= panel['imageURL'] %>" /></td>
-              </tr>
-            <% end %>
-          </table>
+              <div class="iw-finder-panel-display">
+                <div class="iw-finder-panel-img"><img src="<%= panel['imageURL'] %>" /></div>
+                <% if file[:panels].count > 1 %>
+                  <div class="iw-finder-panel-selector"> 
+                    <input 
+                           type=checkbox 
+                           class="iw-finder-choose-panel"
+                           iw-file-id="<%= file['id'] %>" 
+                           iw-panelno="<%= panel['panelno'] %>"
+                           <%= "checked" if panel[:selected] %> 
+                    />
+                    <span>pg <%= panel['panelno'] %></span>
+                </div> 
+              <% end %>
+            </div>
+          <% end %>
         </td>
       </tr>
     <% end %>
   <% end %>
 </table>
-</div>
